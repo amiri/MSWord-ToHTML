@@ -1,14 +1,20 @@
 #!/usr/bin/env perl
 use inc::Module::Install;
 
+auto_set_repository;
 name 'MSWord-ToHTML5';
 all_from 'lib/MSWord/ToHTML5.pm';
+abstract 'Take old or new Word files and spit out HTML5';
+author 'Amiri Barksdale <amiri@arisdottle.net>';
+license 'perl';
+perl_version '5.010001';
+version '0.001';
 
 requires_external_bin 'antiword';
 
 requires 'Devel::Dwarn' => '0';
 requires 'Test::Most' => '0';
-requires 'Text::Extract::Word' => '0'
+requires 'Text::Extract::Word' => '0';
 requires 'Archive::Zip' => '0';
 requires 'Archive::Zip::MemberRead' => '0';
 requires 'Carp' => '0';
