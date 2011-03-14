@@ -17,6 +17,9 @@ use File::Basename;
 use XML::LibXML;
 use XML::LibXSLT;
 
+
+# ABSTRACT: Take old or new Word files and spit out HTML5
+
 has 'parser' => (
   is => 'ro',
   isa => 'XML::LibXML',
