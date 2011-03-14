@@ -17,6 +17,7 @@ use File::Basename;
 use XML::LibXML;
 use XML::LibXSLT;
 
+our $VERSION = '0.001';
 
 # ABSTRACT: Take old or new Word files and spit out HTML5
 
