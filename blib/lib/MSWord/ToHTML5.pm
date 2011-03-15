@@ -16,7 +16,7 @@ use File::Path qw/make_path/;
 use File::Basename;
 use XML::LibXML;
 use XML::LibXSLT;
-use Digest::SHA1 qw/sha1_hex/;
+
 
 # ABSTRACT: Take old or new Word files and spit out HTML5
 
@@ -83,11 +83,7 @@ method get_dom ($file) {
 method convert_to_html ($dom) {
   my $stylesheet = $self->transformer->parse_stylesheet($self->style);
   my $results = $stylesheet->transform($dom);
-  my $text = $stylesheet->output_as_bytes($results);
-  my $filename = sha1_hex($text);
-  $text > io("tmp/$filename");
-  `tidy -f tmp/$filename.err -m --clean --word-2000 1 --drop-empty-paras 1 --drop-font-tags 1 --char-encoding utf8 "tmp/$filename"`;
-  return io("tmp/$filename");
+  return $stylesheet->output_as_bytes($results);
 }
 
 __PACKAGE__->meta->make_immutable;

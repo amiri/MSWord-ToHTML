@@ -1,0 +1,27 @@
+Config: missing or malformed argument for option: clean
+line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 2 column 1 - Warning: inserting missing 'title' element
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:w"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:a"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:o"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:v"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:wx"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:aml"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:w10"
+line 83 column 69 - Warning: <style> inserting "type" attribute
+line 94 column 64 - Warning: trimming empty <span>
+line 98 column 64 - Warning: trimming empty <span>
+line 112 column 281 - Warning: trimming empty <span>
+line 113 column 798 - Warning: trimming empty <span>
+line 116 column 773 - Warning: trimming empty <span>
+line 121 column 705 - Warning: trimming empty <span>
+line 121 column 1042 - Warning: trimming empty <span>
+Info: Document content looks like XHTML 1.0 Transitional
+Info: No system identifier in emitted doctype
+17 warnings, 0 errors were found!
+
+To learn more about HTML Tidy see http://tidy.sourceforge.net
+Please fill bug reports and queries using the "tracker" on the Tidy web site.
+Additionally, questions can be sent to html-tidy@w3.org
+HTML and CSS specifications are available from http://www.w3.org/
+Lobby your company to join W3C, see http://www.w3.org/Consortium
