@@ -1,0 +1,102 @@
+Config: missing or malformed argument for option: clean
+line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 2 column 1 - Warning: inserting missing 'title' element
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:w"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:a"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:o"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:v"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:wx"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:aml"
+line 1 column 1 - Warning: <html> proprietary attribute "xmlns:w10"
+line 83 column 69 - Warning: <style> inserting "type" attribute
+line 97 column 1 - Warning: <table> lacks "summary" attribute
+line 133 column 39 - Warning: <tr> proprietary attribute "height"
+line 155 column 266 - Warning: <a> attribute "href" lacks value
+line 91 column 125 - Warning: trimming empty <span>
+line 92 column 125 - Warning: trimming empty <span>
+line 93 column 142 - Warning: trimming empty <span>
+line 94 column 125 - Warning: trimming empty <span>
+line 94 column 622 - Warning: trimming empty <span>
+line 94 column 762 - Warning: trimming empty <span>
+line 95 column 142 - Warning: trimming empty <span>
+line 95 column 753 - Warning: trimming empty <span>
+line 95 column 1105 - Warning: trimming empty <span>
+line 95 column 1587 - Warning: trimming empty <span>
+line 95 column 1811 - Warning: trimming empty <span>
+line 96 column 142 - Warning: trimming empty <span>
+line 99 column 145 - Warning: trimming empty <span>
+line 100 column 145 - Warning: trimming empty <span>
+line 101 column 145 - Warning: trimming empty <span>
+line 102 column 145 - Warning: trimming empty <span>
+line 105 column 145 - Warning: trimming empty <span>
+line 106 column 145 - Warning: trimming empty <span>
+line 107 column 145 - Warning: trimming empty <span>
+line 108 column 145 - Warning: trimming empty <span>
+line 111 column 145 - Warning: trimming empty <span>
+line 112 column 145 - Warning: trimming empty <span>
+line 113 column 145 - Warning: trimming empty <span>
+line 114 column 145 - Warning: trimming empty <span>
+line 117 column 145 - Warning: trimming empty <span>
+line 118 column 145 - Warning: trimming empty <span>
+line 119 column 145 - Warning: trimming empty <span>
+line 120 column 145 - Warning: trimming empty <span>
+line 123 column 145 - Warning: trimming empty <span>
+line 124 column 145 - Warning: trimming empty <span>
+line 125 column 145 - Warning: trimming empty <span>
+line 126 column 145 - Warning: trimming empty <span>
+line 129 column 145 - Warning: trimming empty <span>
+line 130 column 145 - Warning: trimming empty <span>
+line 131 column 145 - Warning: trimming empty <span>
+line 132 column 145 - Warning: trimming empty <span>
+line 139 column 125 - Warning: trimming empty <span>
+line 139 column 190 - Warning: trimming empty <span>
+line 140 column 125 - Warning: trimming empty <span>
+line 141 column 122 - Warning: trimming empty <span>
+line 141 column 623 - Warning: trimming empty <span>
+line 141 column 847 - Warning: trimming empty <span>
+line 142 column 125 - Warning: trimming empty <span>
+line 143 column 142 - Warning: trimming empty <span>
+line 143 column 1913 - Warning: trimming empty <span>
+line 144 column 142 - Warning: trimming empty <span>
+line 144 column 2017 - Warning: trimming empty <span>
+line 145 column 142 - Warning: trimming empty <span>
+line 146 column 125 - Warning: trimming empty <span>
+line 147 column 125 - Warning: trimming empty <span>
+line 147 column 1224 - Warning: trimming empty <span>
+line 148 column 142 - Warning: trimming empty <span>
+line 149 column 142 - Warning: trimming empty <span>
+line 150 column 125 - Warning: trimming empty <span>
+line 151 column 105 - Warning: trimming empty <span>
+line 152 column 104 - Warning: trimming empty <span>
+line 153 column 104 - Warning: trimming empty <span>
+line 154 column 104 - Warning: trimming empty <span>
+line 155 column 122 - Warning: trimming empty <span>
+line 155 column 187 - Warning: trimming empty <span>
+line 155 column 452 - Warning: trimming empty <span>
+line 156 column 105 - Warning: trimming empty <span>
+line 157 column 87 - Warning: trimming empty <span>
+line 158 column 87 - Warning: trimming empty <span>
+line 159 column 87 - Warning: trimming empty <span>
+line 160 column 87 - Warning: trimming empty <span>
+line 161 column 87 - Warning: trimming empty <span>
+Info: Document content looks like HTML Proprietary
+80 warnings, 0 errors were found!
+
+The table summary attribute should be used to describe
+the table structure. It is very helpful for people using
+non-visual browsers. The scope and headers attributes for
+table cells are useful for specifying which headers apply
+to each table cell, enabling non-visual browsers to provide
+a meaningful context for each cell.
+
+For further advice on how to make your pages accessible
+see http://www.w3.org/WAI/GL.
+. You may also want to try
+"http://www.cast.org/bobby/" which is a free Web-based
+service for checking URLs for accessibility.
+
+To learn more about HTML Tidy see http://tidy.sourceforge.net
+Please fill bug reports and queries using the "tracker" on the Tidy web site.
+Additionally, questions can be sent to html-tidy@w3.org
+HTML and CSS specifications are available from http://www.w3.org/
+Lobby your company to join W3C, see http://www.w3.org/Consortium

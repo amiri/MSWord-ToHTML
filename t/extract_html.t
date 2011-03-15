@@ -28,7 +28,7 @@ for my $doc (@docs) {
     "My recognize functions works OK for docs";
     lives_ok { $xml_dom = $converter->get_dom($response) } "My xml_dom is OK";
     lives_ok { $html = $converter->convert_to_html($xml_dom) } "My html is OK";
-    diag Dwarn $html;
+    #diag Dwarn $html;
 }
 
 for my $docx (@docxs) {
@@ -38,7 +38,7 @@ for my $docx (@docxs) {
     lives_ok { $xml_dom = $converter->get_dom($response) } "My xml_dom is OK";
 
     lives_ok { $html = $converter->convert_to_html($xml_dom) } "My html is OK";
-    #diag Dwarn $html;
+    diag Dwarn $html;
 }
 
 #lives_ok { $converter->convert_doc($_) } "My converter works OK" for @docs;
