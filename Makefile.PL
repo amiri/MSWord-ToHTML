@@ -11,6 +11,7 @@ perl_version '5.010001';
 version '0.001';
 
 requires_external_bin 'antiword';
+requires_external_bin 'tidy';
 
 requires 'Devel::Dwarn' => '0';
 requires 'Test::Most' => '0';

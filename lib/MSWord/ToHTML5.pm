@@ -4,7 +4,6 @@ use Moose;
 use feature "say";
 use MooseX::Method::Signatures;
 use IO::All;
-use IO::All::File;
 use Carp;
 use Archive::Zip qw/:ERROR_CODES :CONSTANTS/;
 use Archive::Zip::MemberRead;
@@ -17,32 +16,56 @@ use File::Basename;
 use XML::LibXML;
 use XML::LibXSLT;
 use Digest::SHA1 qw/sha1_hex/;
+use HTML::HTML5::Writer;
 
 # ABSTRACT: Take old or new Word files and spit out HTML5
 
 has 'parser' => (
-  is => 'ro',
-  isa => 'XML::LibXML',
-  lazy => 1,
+  is      => 'ro',
+  isa     => 'XML::LibXML',
+  lazy    => 1,
   default => sub {
-    XML::LibXML->new
+    XML::LibXML->new;
   },
 );
 has 'transformer' => (
-  is => 'ro',
-  isa => 'XML::LibXSLT',
-  lazy => 1,
+  is      => 'ro',
+  isa     => 'XML::LibXSLT',
+  lazy    => 1,
   default => sub {
-    XML::LibXSLT->new
+    XML::LibXSLT->new;
   },
 );
 
-has 'style' => (
-  is => 'ro',
-  lazy => 1,
+has 'doc_style' => (
+  is      => 'ro',
+  lazy    => 1,
   default => sub {
     my $self = shift;
-    $self->parser->load_xml(location=>'etc/docx2html-MS.xsl', no_cdata=>1)
+    $self->parser->load_xml(
+      location => 'etc/docbook-xsl/xhtml-1_1/docbook.xsl',
+      no_cdata => 1
+    );
+  },
+);
+has 'docx_style' => (
+  is      => 'ro',
+  lazy    => 1,
+  default => sub {
+    my $self = shift;
+    $self->parser->load_xml(
+      location => 'etc/docx2html-MS.xsl',
+      no_cdata => 1
+    );
+  },
+);
+
+has 'writer' => (
+  is      => 'ro',
+  isa     => 'HTML::HTML5::Writer',
+  lazy    => 1,
+  default => sub {
+    HTML::HTML5::Writer->new( markup => 'html' );
   },
 );
 
@@ -80,14 +103,28 @@ method get_dom ($file) {
   return $self->parser->parse_file($file);
 }
 
-method convert_to_html ($dom) {
-  my $stylesheet = $self->transformer->parse_stylesheet($self->style);
-  my $results = $stylesheet->transform($dom);
-  my $text = $stylesheet->output_as_bytes($results);
-  my $filename = sha1_hex($text);
+method convert_doc_to_html ($dom) {
+  my $stylesheet = $self->transformer->parse_stylesheet( $self->doc_style );
+  my $results    = $stylesheet->transform($dom);
+  my $text       = $stylesheet->output_as_bytes($results);
+  my $filename   = sha1_hex($text);
+  $text > io("tmp/$filename");
+  `tidy -f tmp/$filename.err -m --clean 1 --drop-empty-paras 1 --drop-font-tags 1 --char-encoding utf8 "tmp/$filename"`;
+  return $self->parser->parse_html_fh( io("tmp/$filename") )
+}
+
+method convert_docx_to_html ($dom) {
+  my $stylesheet = $self->transformer->parse_stylesheet( $self->docx_style );
+  my $results    = $stylesheet->transform($dom);
+  my $text       = $stylesheet->output_as_bytes($results);
+  my $filename   = sha1_hex($text);
   $text > io("tmp/$filename");
   `tidy -f tmp/$filename.err -m --clean --word-2000 1 --drop-empty-paras 1 --drop-font-tags 1 --char-encoding utf8 "tmp/$filename"`;
-  return io("tmp/$filename");
+  return $self->parser->parse_html_fh( io("tmp/$filename") )
+}
+
+method convert_to_html5 ($html) {
+  return $self->writer->document($html)
 }
 
 __PACKAGE__->meta->make_immutable;
