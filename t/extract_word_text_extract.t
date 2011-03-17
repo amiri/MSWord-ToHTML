@@ -34,7 +34,11 @@ for my $doc (@files) {
 
     $body =~ s/\x02/$fn_link . $fn_count++/ge;
     $body = Text::Extract::Word::_filter( $body, undef );
+    #diag Dwarn $body;
 
-    $footnotes =~ s/\x02/$fn_ref . $fn_ref_count++/ge;
-    $footnotes = Text::Extract::Word::_filter( $footnotes, undef );
+    $footnotes =~ s/\x02\t/$fn_ref . $fn_ref_count++/ge;
+    $footnotes = Text::Extract::Word::_filter( $footnotes );
+    #diag $footnotes;
+    #my $footnote_count = $footnotes =~ s/\n\t/\n\t/g;
+    #diag $footnote_count;
 }

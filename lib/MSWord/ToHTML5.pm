@@ -80,6 +80,8 @@ method validate_file($file) {
     my $path = Path::Class::Dir->new( 'tmp', $dir_name );
     $path->mkpath;
 
+    # replace this with something using Text::Extract::Word.
+    # antiword does not do footnotes > xml right.
     system( 'antiword', $file );
     if ( ${^CHILD_ERROR_NATIVE} == 0 ) {
       system("antiword -m 8859-1 -x db $file > $path/document.xml");
@@ -93,7 +95,7 @@ method validate_file($file) {
       return io("$path/word/document.xml");
     }
     else {
-      say "I could not read $file";
+      die "I could not read $file";
     }
 
     confess "I don't know what to do with this file";
