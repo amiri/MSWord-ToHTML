@@ -164,7 +164,7 @@ method post_clean_html (IO::All $html, Str $title) {
 
     my @style_tags = $tree->look_down( '_tag', 'style' );
 
-    say "I have " . scalar @style_tags . " style tags" if scalar @style_tags;
+    #say "I have " . scalar @style_tags . " style tags" if scalar @style_tags;
     for my $style (@style_tags) {
       my $parsed_style;
       {
@@ -211,7 +211,7 @@ method post_clean_html (IO::All $html, Str $title) {
     }
 
     my @footnotes = $tree->look_down('_tag','span', sub { $_[0]->attr('id') =~ /footnote/ } );
-    say "I have " . scalar @footnotes . " footnotes" if scalar @footnotes;
+    #say "I have " . scalar @footnotes . " footnotes" if scalar @footnotes;
     for my $footnote (@footnotes) {
         my $id = $footnote->attr('id');
         my $anchor = $footnote->look_down('_tag','a');
@@ -226,6 +226,11 @@ method post_clean_html (IO::All $html, Str $title) {
 
     ### End final cleaning
 
+    if (@footnotes > 0) {
+        my @divs = $tree->look_down('_tag','div');
+        #say "I have " . scalar @divs . " divs";
+        $divs[$#divs]->attr('id', 'footnotes');
+    }
     my $text = $tree->as_HTML;
     $tree->delete;
     io("$html")->print($text);
@@ -233,7 +238,7 @@ method post_clean_html (IO::All $html, Str $title) {
 }
 
 method filter_css ($tree) {
-    say "I am in filter_css";
+    #say "I am in filter_css";
     my $style_tag = $tree->look_down( '_tag', 'style' );
     my $parsed_style;
     {
@@ -250,11 +255,11 @@ method filter_css ($tree) {
       my @italic_selectors = grep { length($_) > 0 }
         map { $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/; $+{class}; }
         grep { $_->properties =~ /italic/ } @$parsed_style;
-        say "I have " . scalar @italic_selectors . " italic selectors";
+        #say "I have " . scalar @italic_selectors . " italic selectors";
       my @bold_selectors = grep { length($_) > 0 }
         map { $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/; $+{class}; }
         grep { $_->properties =~ /bold/ } @$parsed_style;
-        say "I have " . scalar @bold_selectors . " bold selectors";
+        #say "I have " . scalar @bold_selectors . " bold selectors";
       my %bolds          = map  { $_ => 1 } @bold_selectors;
       my @both_selectors = grep { defined $bolds{$_} } @italic_selectors;
       my %array_for      = (
@@ -266,18 +271,16 @@ method filter_css ($tree) {
       for my $type (qw/both bold italic/) {
         for my $selector ( @{ $array_for{$type} } ) {
           if ($selector) {
-            say "Style selector:", $selector;
+            #say "Style selector:", $selector;
             my @to_filter = $tree->look_down( 'class', $selector );
-            say "I have "
-              . scalar @to_filter
-              . " $type elements for class $selector";
+            #say "I have " . scalar @to_filter . " $type elements for class $selector";
             if ( @to_filter > 0 ) {
-              say "I have elements to filter";
+              #say "I have elements to filter";
               for my $el (@to_filter) {
                 if ( $type eq 'both' ) {
                   my $new_bold   = HTML::Element->new('strong');
                   my $new_italic = HTML::Element->new('em');
-                  say "My new should be both";
+                  #say "My new should be both";
                   $new_bold->push_content( $el->detach_content );
                   $new_italic->push_content($new_bold);
                   $el->replace_with($new_italic);
@@ -287,9 +290,6 @@ method filter_css ($tree) {
                     $type eq 'bold'
                     ? HTML::Element->new('strong')
                     : HTML::Element->new('em');
-                  $type eq 'bold'
-                    ? say "My new should be bold"
-                    : say "My new should be ital";
                   $new->push_content( $el->detach_content );
                   $el->replace_with($new);
                 }
@@ -335,10 +335,12 @@ method html_to_html5(IO::All $base_html) {
 };
 
     (my $title = $self->file->filename) =~ s/\s+/ /g;
+    $title =~ s/\(|\)//g;
     $title =~ /\A(?<filename>\w+)(?<extension>\.\w+)\z/g;
     my $new_title = $+{filename} || 'Untitled';
 
     (my $filename = lc $self->file->filename) =~ s/\s+/_/g;
+    $filename =~ s/\(|\)//g;
     $filename =~ /\A(?<filename>\w+)(?<extension>\.\w+)\z/g;
     $filename = $+{filename};
 
