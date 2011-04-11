@@ -25,6 +25,7 @@ for my $doc (@docs) {
     isa_ok( $new_doc,       "MSWord::ToHTML5::Doc" );
     meta_ok($new_doc);
     can_ok( $new_doc, qw/get_html/ );
+    $new_doc->get_html;
 }
 
 for my $docx (@docxs) {

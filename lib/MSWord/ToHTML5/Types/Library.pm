@@ -9,12 +9,13 @@ use MooseX::Types -declare => [qw/MyFile MSDoc MSDocX/];
 use Try::Tiny;
 use Text::Extract::Word;
 use Archive::Zip qw/:ERROR_CODES :CONSTANTS/;
+use File::Spec;
 
 {
     local *STDERR;
     local *STDOUT;
-    open( STDOUT, '>', File::Spec->devnull );
-    open( STDERR, '>', File::Spec->devnull );
+    open( STDOUT, '>', File::Spec->devnull() );
+    open( STDERR, '>', File::Spec->devnull() );
 
     subtype MyFile, as IO_All, where {
         length($_) > 0;
