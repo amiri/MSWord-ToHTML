@@ -18,33 +18,32 @@ use File::Spec;
     open( STDERR, '>', File::Spec->devnull() );
 
     subtype MyFile, as IO_All, where {
-        length($_) > 0;
+      length($_) > 0;
     }, message {
-        "Did you pass a file?";
+      "Did you pass a file?";
     };
 
     coerce MyFile, from Str, via { to_IO_All($_) };
 
     subtype MSDoc, as MyFile, where {
-        try {
-            Text::Extract::Word->new( $_->filepath . $_->filename );
-        };
+      try {
+        Text::Extract::Word->new( $_->filepath . $_->filename );
+      };
     }, message {
-        "$_ does not appear to be a Word doc file";
+      "$_ does not appear to be a Word doc file";
     };
 
     coerce MSDoc, from MyFile | IO_All, via {$_};
 
     subtype MSDocX, as MyFile, where {
-        my $unzip = Archive::Zip->new;
-        Archive::Zip->new( $_->filepath . $_->filename )
-            && Archive::Zip::MemberRead->new( $unzip, "word/document.xml" );
+      my $unzip = Archive::Zip->new;
+      Archive::Zip->new( $_->filepath . $_->filename )
+        && Archive::Zip::MemberRead->new( $unzip, "word/document.xml" );
     }, message {
-        "$_ does not appear to be a Word docx file";
+      "$_ does not appear to be a Word docx file";
     };
 
     coerce MSDocX, from MyFile | IO_All, via {$_};
-
 }
 
 __PACKAGE__->meta->make_immutable;

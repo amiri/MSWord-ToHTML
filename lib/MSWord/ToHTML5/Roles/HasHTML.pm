@@ -3,7 +3,6 @@ package MSWord::ToHTML5::Roles::HasHTML;
 use Moose::Role;
 use namespace::autoclean;
 use strictures 1;
-use feature 'say';
 use MooseX::Method::Signatures;
 use Digest::SHA1 qw/sha1_hex/;
 use XML::LibXML;
@@ -12,14 +11,12 @@ use IO::All;
 use Try::Tiny;
 use autodie;
 use HTML::HTML5::Writer;
-use Devel::Dwarn;
 use HTML::TreeBuilder;
 use HTML::Entities;
 use Encode;
 use Encode::Guess;
 use CSS;
 use List::MoreUtils qw/any/;
-binmode STDOUT, ":encoding(UTF-8)";
 
 has 'style' => (
     is      => 'ro',
@@ -27,7 +24,8 @@ has 'style' => (
     default => sub {
         my $self = shift;
         $self->parser->load_xml(
-            location => 'http://docbook.sourceforge.net/release/xsl/current/xhtml-1_1/docbook.xsl',
+            location =>
+                'http://docbook.sourceforge.net/release/xsl/current/xhtml-1_1/docbook.xsl',
             no_cdata => 1
         );
     },
@@ -51,32 +49,35 @@ has 'transformer' => (
 );
 
 has 'writer' => (
-  is => 'ro',
-  isa => 'HTML::HTML5::Writer',
-  lazy => 1,
-  default => sub {
-    HTML::HTML5::Writer->new(markup => 'html')
-  },
+    is      => 'ro',
+    isa     => 'HTML::HTML5::Writer',
+    lazy    => 1,
+    default => sub {
+        HTML::HTML5::Writer->new( markup => 'html' );
+    },
 );
 
 has 'css' => (
-  is => 'ro',
-  isa => 'CSS',
-  lazy => 1,
-  default => sub {
-      CSS->new({ 'parser' => 'CSS::Parse::Heavy', adaptor => 'CSS::Adaptor::Debug' })
-  },
+    is      => 'ro',
+    isa     => 'CSS',
+    lazy    => 1,
+    default => sub {
+        CSS->new(
+            {   'parser' => 'CSS::Parse::Heavy',
+                adaptor  => 'CSS::Adaptor::Debug'
+            }
+        );
+    },
 );
 
 has 'html5_parser' => (
-  is => 'ro',
-  isa => 'HTML::HTML5::Parser',
-  lazy => 1,
-  default => sub {
-    return HTML::HTML5::Parser->new;
-  },
+    is      => 'ro',
+    isa     => 'HTML::HTML5::Parser',
+    lazy    => 1,
+    default => sub {
+        return HTML::HTML5::Parser->new;
+    },
 );
-
 
 method get_html {
     my $base_html = $self->extract_base_html(@_);
@@ -88,13 +89,15 @@ method get_dom($file) {
 }
 
 method extract_base_html {
-  my $new_file = io->catfile(io->tmpdir,sha1_hex($self->file->slurp) . '.html');
-  system( 'abiword', '-t', 'html', '-o', $new_file, $self->file );
-  return $self->pre_clean_html($new_file);
+    my $new_file =
+      io->catfile( io->tmpdir, sha1_hex( $self->file->slurp ) . '.html' );
+    system( 'abiword', '-t', 'html', '-o', $new_file, $self->file );
+    return $self->pre_clean_html($new_file);
 }
 
-method prepare_charset ($html) {
-    return utf8::decode($html) if utf8::is_utf8($html);
+method prepare_charset($html) {
+    return utf8::decode($html)
+      if utf8::is_utf8($html);
     my $decoder = Encode::Guess->guess($html);
     if ( ref($decoder) ) {
       return $decoder->decode($html);
@@ -104,8 +107,8 @@ method prepare_charset ($html) {
     }
 }
 
-method pre_clean_html ($html) {
-    my $text  = $self->prepare_charset( $html->all );
+method pre_clean_html($html) {
+    my $text         = $self->prepare_charset( $html->all );
     my $tree_builder = HTML::TreeBuilder->new;
     my $tree         = $tree_builder->parse($text);
     my @ps           = $tree->look_down( '_tag', 'p' );
@@ -144,9 +147,9 @@ method pre_clean_html ($html) {
     return $file;
 }
 
-method post_clean_html (IO::All $html, Str $title) {
+method post_clean_html( IO::All $html, Str $title) {
     my $tree_builder = HTML::TreeBuilder->new;
-    my $tree         = $tree_builder->parse_file("$html");
+    my $tree = $tree_builder->parse( HTML::Entities::decode( $html->all ) );
 
     my $html_tag = $tree->look_down( '_tag', 'html' );
     $html_tag->attr( 'xmlns', undef );
@@ -164,7 +167,6 @@ method post_clean_html (IO::All $html, Str $title) {
 
     my @style_tags = $tree->look_down( '_tag', 'style' );
 
-    #say "I have " . scalar @style_tags . " style tags" if scalar @style_tags;
     for my $style (@style_tags) {
       my $parsed_style;
       {
@@ -180,7 +182,7 @@ method post_clean_html (IO::All $html, Str $title) {
         push @selectors, $parsed->selectors;
       }
       if ( any { $_ =~ /#toc/ } @selectors ) {
-          $style->delete;
+        $style->delete;
       }
     }
 
@@ -205,20 +207,22 @@ method post_clean_html (IO::All $html, Str $title) {
       $empty_span->replace_with_content->delete;
     }
 
-    my @classed_elements = $tree->look_down( sub { defined $_[0]->attr('class')} );
-    for my $classed(@classed_elements) {
+    my @classed_elements =
+      $tree->look_down( sub { defined $_[0]->attr('class') } );
+    for my $classed (@classed_elements) {
       $classed->attr( 'class', undef );
     }
 
-    my @footnotes = $tree->look_down('_tag','span', sub { $_[0]->attr('id') =~ /footnote/ } );
-    #say "I have " . scalar @footnotes . " footnotes" if scalar @footnotes;
+    my @footnotes =
+      $tree->look_down( '_tag', 'span',
+      sub { $_[0]->attr('id') =~ /footnote/ } );
     for my $footnote (@footnotes) {
-        my $id = $footnote->attr('id');
-        my $anchor = $footnote->look_down('_tag','a');
-        $anchor->attr('id', $id);
-        my $new = HTML::Element->new('sup');
-        $new->push_content($footnote->detach_content);
-        $footnote->replace_with($new);
+      my $id = $footnote->attr('id');
+      my $anchor = $footnote->look_down( '_tag', 'a' );
+      $anchor->attr( 'id', $id );
+      my $new = HTML::Element->new('sup');
+      $new->push_content( $footnote->detach_content );
+      $footnote->replace_with($new);
     }
 
     my $final_style_tag = $tree->look_down( '_tag', 'style' );
@@ -226,10 +230,9 @@ method post_clean_html (IO::All $html, Str $title) {
 
     ### End final cleaning
 
-    if (@footnotes > 0) {
-        my @divs = $tree->look_down('_tag','div');
-        #say "I have " . scalar @divs . " divs";
-        $divs[$#divs]->attr('id', 'footnotes');
+    if ( @footnotes > 0 ) {
+      my @divs = $tree->look_down( '_tag', 'div' );
+      $divs[$#divs]->attr( 'id', 'footnotes' );
     }
     my $text = $tree->as_HTML;
     $tree->delete;
@@ -237,8 +240,7 @@ method post_clean_html (IO::All $html, Str $title) {
     return $html;
 }
 
-method filter_css ($tree) {
-    #say "I am in filter_css";
+method filter_css($tree) {
     my $style_tag = $tree->look_down( '_tag', 'style' );
     my $parsed_style;
     {
@@ -253,13 +255,17 @@ method filter_css ($tree) {
 
     if ($parsed_style) {
       my @italic_selectors = grep { length($_) > 0 }
-        map { $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/; $+{class}; }
+        map {
+        $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/;
+        $+{class};
+        }
         grep { $_->properties =~ /italic/ } @$parsed_style;
-        #say "I have " . scalar @italic_selectors . " italic selectors";
       my @bold_selectors = grep { length($_) > 0 }
-        map { $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/; $+{class}; }
+        map {
+        $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/;
+        $+{class};
+        }
         grep { $_->properties =~ /bold/ } @$parsed_style;
-        #say "I have " . scalar @bold_selectors . " bold selectors";
       my %bolds          = map  { $_ => 1 } @bold_selectors;
       my @both_selectors = grep { defined $bolds{$_} } @italic_selectors;
       my %array_for      = (
@@ -271,16 +277,12 @@ method filter_css ($tree) {
       for my $type (qw/both bold italic/) {
         for my $selector ( @{ $array_for{$type} } ) {
           if ($selector) {
-            #say "Style selector:", $selector;
             my @to_filter = $tree->look_down( 'class', $selector );
-            #say "I have " . scalar @to_filter . " $type elements for class $selector";
             if ( @to_filter > 0 ) {
-              #say "I have elements to filter";
               for my $el (@to_filter) {
                 if ( $type eq 'both' ) {
                   my $new_bold   = HTML::Element->new('strong');
                   my $new_italic = HTML::Element->new('em');
-                  #say "My new should be both";
                   $new_bold->push_content( $el->detach_content );
                   $new_italic->push_content($new_bold);
                   $el->replace_with($new_italic);
@@ -302,57 +304,56 @@ method filter_css ($tree) {
     return $tree;
 }
 
-method html_to_html5(IO::All $base_html) {
+method html_to_html5( IO::All $base_html) {
     try {
-    system(
-        "tidy",
-        "-f","$base_html.err",
-        "-m",
-        "--clean","yes",
-        "--preserve-entities","yes",
-        "--indent-cdata","yes",
-        "--escape-cdata","yes",
-        "--repeated-attributes","keep-last",
-        "--char-encoding","utf8",
-        "--output-encoding","utf8",
-        "--merge-spans","yes",
-        "-quiet",
-        "--bare","yes",
-        "--logical-emphasis","yes",
-        "--word-2000","yes",
-        "--drop-empty-paras","yes",
-        "--drop-font-tags","yes",
-        "--drop-proprietary-attributes","yes",
-        "--hide-endtags","no",
-        "-language","en",
-        "--add-xml-decl","yes",
-        "--output-xhtml","yes",
-        "--doctype","strict",
-        "$base_html"
-    );
-} catch {
-  "I could not tidy the base_html: $_";
-};
+      system(
+        "tidy",                  "-f",
+        "$base_html.err",        "-m",
+        "--clean",               "yes",
+        "--preserve-entities",   "yes",
+        "--indent-cdata",        "yes",
+        "--escape-cdata",        "yes",
+        "--repeated-attributes", "keep-last",
+        "--char-encoding",       "utf8",
+        "--output-encoding",     "utf8",
+        "--merge-spans",         "yes",
+        "-quiet",                "--bare",
+        "yes",                   "--logical-emphasis",
+        "yes",                   "--word-2000",
+        "yes",                   "--drop-empty-paras",
+        "yes",                   "--drop-font-tags",
+        "yes",                   "--drop-proprietary-attributes",
+        "yes",                   "--hide-endtags",
+        "no",                    "-language",
+        "en",                    "--add-xml-decl",
+        "yes",                   "--output-xhtml",
+        "yes",                   "--doctype",
+        "strict",                "$base_html"
+      );
+    }
+    catch {
+      "I could not tidy the base_html: $_";
+    };
 
-    (my $title = $self->file->filename) =~ s/\s+/ /g;
-    $title =~ s/\(|\)//g;
-    $title =~ /\A(?<filename>\w+)(?<extension>\.\w+)\z/g;
+    ( my $title = $self->file->filename ) =~ s/\s+/ /g;
+    $title =~ s/\(|\)|\-//g;
+    $title =~ /\A(?<filename>.+?)(?<extension>\.\w+)\z/g;
     my $new_title = $+{filename} || 'Untitled';
+    $new_title =~ s/[[:punct:]]/ /g;
 
-    (my $filename = lc $self->file->filename) =~ s/\s+/_/g;
-    $filename =~ s/\(|\)//g;
-    $filename =~ /\A(?<filename>\w+)(?<extension>\.\w+)\z/g;
+    ( my $filename = lc $self->file->filename ) =~ s/\s+/_/g;
+    $filename =~ s/\(|\)|\-//g;
+    $filename =~ /\A(?<filename>.+?)(?<extension>\.\w+)\z/g;
     $filename = $+{filename};
+    $filename =~ s/[[:punct:]]/_/g;
 
     $base_html = io("$base_html")->utf8;
-    my $cleaned_html = $self->post_clean_html($base_html,$new_title);
-    my $new_dom = $self->parser->parse_html_fh(io("$cleaned_html"));
-    my $html5 = $self->writer->document($new_dom);
+    my $cleaned_html = $self->post_clean_html( $base_html, $new_title );
+    my $new_dom      = $self->parser->parse_html_fh( io("$cleaned_html") );
+    my $html5        = $self->writer->document($new_dom);
 
-
-    my $html5_file = io($filename . '.html')->utf8->print($html5);
+    my $html5_file = io->catfile( io->tmpdir, $filename . '.html' )->utf8->print($html5);
     return $html5_file;
 }
-
 
 1;
