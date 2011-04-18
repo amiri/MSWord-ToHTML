@@ -7,13 +7,13 @@ use Module::Find;
 use Devel::Dwarn;
 use Archive::Zip::MemberRead;
 use lib 'lib';
-use MSWord::ToHTML5;
-use MSWord::ToHTML5::Types::Library qw/:all/;
+use MSWord::ToHTML;
+use MSWord::ToHTML::Types::Library qw/:all/;
 
 my @docs  = glob('t/data/*.doc');
 my @docxs = glob('t/data/*.docx');
 
-my $converter = MSWord::ToHTML5->new;
+my $converter = MSWord::ToHTML->new;
 
 for my $doc (@docs) {
     my ($new_doc,$html);

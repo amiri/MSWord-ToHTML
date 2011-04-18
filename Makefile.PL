@@ -2,8 +2,8 @@
 use inc::Module::Install;
 
 auto_set_repository;
-name 'MSWord-ToHTML5';
-all_from 'lib/MSWord/ToHTML5.pm';
+name 'MSWord-ToHTML';
+all_from 'lib/MSWord/ToHTML.pm';
 readme_from 'lib/MSWord/ToHTML.pm';
 abstract 'Take old or new Word files and spit out extremely clean HTML';
 author 'Amiri Barksdale <amiri@arisdottle.net>';

@@ -1,5 +1,5 @@
 NAME
-    MSWord::ToHTML5
+    MSWord::ToHTML
 
     Take old or new format Word files and spit out HTML5.
 
@@ -17,13 +17,13 @@ SYNOPSIS
 
             use strict;
             use warnings;
-            use MSWord::ToHTML5;
+            use MSWord::ToHTML;
 
-            my $converter = MSWord::ToHTML5->new;
+            my $converter = MSWord::ToHTML->new;
             my $doc = $converter->validate_file("/home/myself/my_excellent_writing.doc");
-              # This returns an instance of MSWord::ToHTML5::Doc
+              # This returns an instance of MSWord::ToHTML::Doc
             my $docx = $converter->validate_file("/home/myself/my_excellent_notes.docx");
-              # This returns an instance of MSWord::ToHTML5::DocX
+              # This returns an instance of MSWord::ToHTML::DocX
 
             my $writing_html = $doc->get_html;
             my $notes_html = $docx->get_html;
@@ -37,7 +37,7 @@ SYNOPSIS
 
 METHODS
     new (constructor)
-        MSWord::ToHTML5 is a Moose class, so new is Moose's constructor.
+        MSWord::ToHTML is a Moose class, so new is Moose's constructor.
 
     validate_file
         This gets you the only thing you need, which is an object ready to
@@ -51,7 +51,7 @@ AUTHOR
     Amiri Barksdale, <amiri@arisdottle.net>
 
 COPYRIGHT
-    Copyright (c) 2011 the MSWord::ToHTML5 "AUTHOR" listed above.
+    Copyright (c) 2011 the MSWord::ToHTML "AUTHOR" listed above.
 
 LICENSE
     This library is free software; you can redistribute it and/or modify it

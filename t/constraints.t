@@ -7,13 +7,13 @@ use Module::Find;
 use Devel::Dwarn;
 use Archive::Zip::MemberRead;
 use lib 'lib';
-use MSWord::ToHTML5;
-use MSWord::ToHTML5::Types::Library qw/:all/;
+use MSWord::ToHTML;
+use MSWord::ToHTML::Types::Library qw/:all/;
 
 my @docs  = glob('t/data/*.doc');
 my @docxs = glob('t/data/*.docx');
 
-my $converter = MSWord::ToHTML5->new;
+my $converter = MSWord::ToHTML->new;
 
 for my $doc (@docs) {
     my ( $new_doc, $second );
@@ -22,7 +22,7 @@ for my $doc (@docs) {
     $new_doc = $converter->validate_file($doc);
     ok( is_MyFile( $new_doc->file ), "My new doc has a MyFile" );
     isa_ok( $new_doc->file, "IO::All::File" );
-    isa_ok( $new_doc,       "MSWord::ToHTML5::Doc" );
+    isa_ok( $new_doc,       "MSWord::ToHTML::Doc" );
     meta_ok($new_doc);
     can_ok( $new_doc, qw/get_html/ );
     $new_doc->get_html;
@@ -46,7 +46,7 @@ for my $docx (@docxs) {
     }
     "I can check for the main xml file in the docx";
     isa_ok( $internal_xml_check, "Archive::Zip::MemberRead" );
-    isa_ok( $new_docx,           "MSWord::ToHTML5::DocX" );
+    isa_ok( $new_docx,           "MSWord::ToHTML::DocX" );
     meta_ok($new_docx);
     can_ok( $new_docx, qw/get_html/ );
     $new_docx->get_html;
