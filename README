@@ -1,7 +1,7 @@
 NAME
     MSWord::ToHTML
 
-    Take old or new format Word files and spit out HTML5.
+    Take old or new format Word files and spit out extremely clean HTML.
 
 NOTICE
     Because of the PITA involved in processing Word files, I have punted
@@ -48,7 +48,7 @@ METHODS
         object with your fresh HTML5 doc.
 
 AUTHOR
-    Amiri Barksdale, <amiri@arisdottle.net>
+    Amiri Barksdale, <amiri@roosterpirates.com>
 
 COPYRIGHT
     Copyright (c) 2011 the MSWord::ToHTML "AUTHOR" listed above.

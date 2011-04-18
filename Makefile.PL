@@ -6,7 +6,7 @@ name 'MSWord-ToHTML';
 all_from 'lib/MSWord/ToHTML.pm';
 readme_from 'lib/MSWord/ToHTML.pm';
 abstract 'Take old or new Word files and spit out extremely clean HTML';
-author 'Amiri Barksdale <amiri@arisdottle.net>';
+author 'Amiri Barksdale <amiri@roosterpirates.com>';
 license 'perl';
 perl_version '5.010001';
 version '0.001';
