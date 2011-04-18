@@ -254,13 +254,13 @@ method filter_css($tree) {
     }
 
     if ($parsed_style) {
-      my @italic_selectors = grep { length($_) > 0 }
+      my @italic_selectors = grep { $_ }
         map {
         $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/;
         $+{class};
         }
         grep { $_->properties =~ /italic/ } @$parsed_style;
-      my @bold_selectors = grep { length($_) > 0 }
+      my @bold_selectors = grep { $_ }
         map {
         $_->selectors =~ /^(?<tag>\w+\.)(?<class>\w+)$/;
         $+{class};
