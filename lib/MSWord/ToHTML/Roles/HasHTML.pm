@@ -3,6 +3,7 @@ package MSWord::ToHTML::Roles::HasHTML;
 use Moose::Role;
 use namespace::autoclean;
 use strictures 1;
+use MSWord::ToHTML::HTML;
 use MooseX::Method::Signatures;
 use Digest::SHA1 qw/sha1_hex/;
 use XML::LibXML;
@@ -17,6 +18,7 @@ use Encode;
 use Encode::Guess;
 use CSS;
 use List::MoreUtils qw/any/;
+use feature 'say';
 
 has 'style' => (
     is      => 'ro',
@@ -143,6 +145,7 @@ method pre_clean_html($html) {
     }
 
     my $file = io("$html")->utf8->print( $tree->as_HTML );
+    #say $file;
     $tree->delete;
     return $file;
 }
@@ -353,7 +356,11 @@ method html_to_html5( IO::All $base_html) {
     my $html5        = $self->writer->document($new_dom);
 
     my $html5_file = io->catfile( io->tmpdir, $filename . '.html' )->utf8->print($html5);
-    return $html5_file;
+    my $html5_images = "$base_html" . "_files";
+    return MSWord::ToHTML::HTML->new(
+      file => $html5_file,
+      ( -e $html5_images ? ( images => $html5_images ) : () )
+    );
 }
 
 1;

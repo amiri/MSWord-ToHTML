@@ -64,27 +64,47 @@ Which means that you must have the binary programs tidy and abiword installed.
 
     }
 
-Those final two method calls return IO::All::File objects from files written to your
-temp directory. I haven't tested this on Windows, but the module attempts to be
-agnostic with regards to temporary directories.
-
+Those final two method calls return an MSWord::ToHTML::HTML object, which contains:
 
 =head1 METHODS
 
-=over
-
-=item new (constructor)
+=head2 new
 
 MSWord::ToHTML is a Moose class, so new is Moose's constructor.
 
-=item validate_file
+=cut
+
+=head2 validate_file
 
 This gets you the only thing you need, which is an object ready to give you its HTML.
 
-=item get_html
+=cut
 
-This is the other important method, that gives you an IO::All::File object with
-your fresh HTML5 doc.
+=head2 get_html
+
+This is the other important method, that gives you an MSWord::ToHTML::HTML object
+that contains:
+
+=over
+
+=item file
+
+An IO::All::File object from the html file written to your temp directory.
+I haven't tested this on Windows, but the module attempts to be
+agnostic with regards to temporary directories.
+
+  my $long_html_string = $notes_html->file->slurp;
+
+=item images
+
+A Path::Class::Dir containing all the images or static files associated with your
+html document, so that you can iterate over them and copy them to a destination
+of your choosing.
+
+I used Path::Class::Dir instead of IO::All's directory methods because it's
+friendlier:
+
+  my @image_files = $writing_html->images->children;
 
 =back
 
