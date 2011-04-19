@@ -10,7 +10,7 @@ use MSWord::ToHTML::Doc;
 use MSWord::ToHTML::DocX;
 use Try::Tiny;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 # ABSTRACT: Take old or new Word files and spit out superclean HTML
 
