@@ -10,7 +10,7 @@ use MSWord::ToHTML::Doc;
 use MSWord::ToHTML::DocX;
 use Try::Tiny;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 # ABSTRACT: Take old or new Word files and spit out superclean HTML
 
@@ -60,11 +60,11 @@ Which means that you must have the binary programs tidy and abiword installed.
           # This returns an instance of MSWord::ToHTML::DocX
 
         my $writing_html = $doc->get_html;
+          # This returns an instance of MSWord::ToHTML::HTML
         my $notes_html = $docx->get_html;
+          # This returns an instance of MSWord::ToHTML::HTML
 
     }
-
-Those final two method calls return an MSWord::ToHTML::HTML object, which contains:
 
 =head1 METHODS
 
@@ -82,8 +82,8 @@ This gets you the only thing you need, which is an object ready to give you its 
 
 =head2 get_html
 
-This is the other important method, that gives you an MSWord::ToHTML::HTML object
-that contains:
+This is the other important method, that gives you an MSWord::ToHTML::HTML
+object that contains:
 
 =over
 
@@ -91,15 +91,15 @@ that contains:
 
 An IO::All::File object from the html file written to your temp directory.
 I haven't tested this on Windows, but the module attempts to be
-agnostic with regards to temporary directories.
+agnostic with regards to temporary directories. So you can do stuff like this:
 
   my $long_html_string = $notes_html->file->slurp;
 
 =item images
 
-A Path::Class::Dir containing all the images or static files associated with your
-html document, so that you can iterate over them and copy them to a destination
-of your choosing.
+A Path::Class::Dir containing all the images or static files associated with
+your html document, so that you can iterate over them and copy them to a
+destination of your choosing.
 
 I used Path::Class::Dir instead of IO::All's directory methods because it's
 friendlier:
