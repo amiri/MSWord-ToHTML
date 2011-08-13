@@ -1,0 +1,84 @@
+{
+   "abstract" : "Take old or new Word files and spit out extremely clean HTML",
+   "author" : [
+      "Amiri Barksdale, <amiri@roosterpirates.com>",
+      "Amiri Barksdale <amiri@roosterpirates.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 1.01, CPAN::Meta::Converter version 2.112150",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "MSWord-ToHTML",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.42",
+            "Test::Most" : "0.23"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.42"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Archive::Zip" : "1.30",
+            "Archive::Zip::MemberRead" : "1.3",
+            "CSS" : "1.09",
+            "Carp" : 0,
+            "Digest::SHA1" : "2.13",
+            "Encode" : "2.42",
+            "Encode::Guess" : "2.04",
+            "File::Basename" : 0,
+            "File::Path" : "2.08_01",
+            "File::Spec" : 0,
+            "HTML::Entities" : "3.68",
+            "HTML::HTML5::Writer" : "0.102",
+            "HTML::TreeBuilder" : "4.2",
+            "IO::All" : "0.41",
+            "IO::All::File" : 0,
+            "List::MoreUtils" : "0.30",
+            "Module::Find" : "0.10",
+            "Moose" : "2.0000",
+            "Moose::Role" : "2.0000",
+            "Moose::Util::TypeConstraints" : "2.0000",
+            "MooseX::Method::Signatures" : "0.36",
+            "MooseX::Types" : "0.25",
+            "MooseX::Types::IO::All" : "0.03",
+            "MooseX::Types::Moose" : "0.25",
+            "MooseX::Types::Path::Class" : "0.05",
+            "Path::Class::Dir" : "0.23",
+            "Text::Extract::Word" : "0.02",
+            "Try::Tiny" : "0.09",
+            "XML::LibXML" : "1.70",
+            "XML::LibXSLT" : "1.70",
+            "autodie" : "2.10",
+            "namespace::autoclean" : "0.12",
+            "perl" : "5.010001",
+            "strictures" : 0
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "url" : "git://github.com/amiri/MSWord-ToHTML.git"
+      }
+   },
+   "version" : "0.003"
+}
