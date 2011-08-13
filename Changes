@@ -1,14 +1,14 @@
-Revision history for perl module MSWord::ToHTML
+Revison history for MSWord-ToHTML
+
+0.004 2011-08-13
+  - Add Module::Find to prereqs.
 
 0.003 2011-04-19
-
   - Fixed documentation.
 
 0.002 2011-04-18
-
   - Add missing dep, MooseX::Types::Path::Class,
     to Makefile.PL.
 
 0.001 2011-04-18
-  
   - Initial release.

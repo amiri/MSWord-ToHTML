@@ -9,7 +9,7 @@ abstract 'Take old or new Word files and spit out extremely clean HTML';
 author 'Amiri Barksdale <amiri@roosterpirates.com>';
 license 'perl';
 perl_version '5.010001';
-version '0.003';
+version '0.004';
 
 requires_external_bin 'abiword';
 requires_external_bin 'tidy';
@@ -30,6 +30,7 @@ requires 'HTML::TreeBuilder' => '4.2';
 requires 'IO::All' => '0.41';
 requires 'IO::All::File' => '0';
 requires 'List::MoreUtils' => '0.30';
+requires 'Module::Find' => '0.10';
 requires 'Moose' => '2.0000';
 requires 'Moose::Role' => '2.0000';
 requires 'Moose::Util::TypeConstraints' => '2.0000';
