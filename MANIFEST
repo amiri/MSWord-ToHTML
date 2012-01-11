@@ -23,6 +23,37 @@ Makefile.PL
 MANIFEST			This list of files
 META.yml
 MSWord-ToHTML-0.001.tar.gz
+MSWord-ToHTML-0.005/Changes
+MSWord-ToHTML-0.005/lib/MSWord/ToHTML.pm
+MSWord-ToHTML-0.005/lib/MSWord/ToHTML/Doc.pm
+MSWord-ToHTML-0.005/lib/MSWord/ToHTML/DocX.pm
+MSWord-ToHTML-0.005/lib/MSWord/ToHTML/HTML.pm
+MSWord-ToHTML-0.005/lib/MSWord/ToHTML/Roles/HasHTML.pm
+MSWord-ToHTML-0.005/lib/MSWord/ToHTML/Types/Library.pm
+MSWord-ToHTML-0.005/Makefile.PL
+MSWord-ToHTML-0.005/MANIFEST
+MSWord-ToHTML-0.005/META.yml
+MSWord-ToHTML-0.005/README
+MSWord-ToHTML-0.005/t/constraints.t
+MSWord-ToHTML-0.005/t/convert.t
+MSWord-ToHTML-0.005/t/data/california.doc
+MSWord-ToHTML-0.005/t/data/fresh_idea.docx
+'MSWord-ToHTML-0.005/t/data/From Iron  MInes to Iron Bars.docx'
+MSWord-ToHTML-0.005/t/data/Greece(Giorgos).copy.doc
+MSWord-ToHTML-0.005/t/data/Greece(Giorgos).doc
+'MSWord-ToHTML-0.005/t/data/Henri_Crisis Final JG.doc'
+'MSWord-ToHTML-0.005/t/data/Historical Moment.doc'
+MSWord-ToHTML-0.005/t/data/InsurgentNotes(Cover).doc
+MSWord-ToHTML-0.005/t/data/InsurgentNotes(Masthead).doc
+'MSWord-ToHTML-0.005/t/data/Jackson_2nd rewrite (1).doc'
+MSWord-ToHTML-0.005/t/data/Madison.doc
+MSWord-ToHTML-0.005/t/data/s-artesian2.docx
+MSWord-ToHTML-0.005/t/data/transparent.png
+MSWord-ToHTML-0.005/t/data/Turkey.doc
+'MSWord-ToHTML-0.005/t/data/Turkey2.copy*Where is it?.docx'
+MSWord-ToHTML-0.005/t/data/Turkey2.docx
+MSWord-ToHTML-0.005/t/data/Wisconsin.doc
+MSWord-ToHTML-0.005/t/sanity.t
 README
 t/constraints.t
 t/convert.t
@@ -44,4 +75,3 @@ t/data/Turkey.doc
 t/data/Turkey2.docx
 t/data/Wisconsin.doc
 t/sanity.t
-TODO

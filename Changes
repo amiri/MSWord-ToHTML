@@ -1,5 +1,12 @@
 Revison history for MSWord-ToHTML
 
+0.005 2012-01-10
+  - Add a method content to MSWord::ToHTML::HTML to retrieve
+    the new html file's content. This was wrong before: the file
+    attribute contains an IO::All::String, not an IO::All::File.
+
+  - Use Archive::Zip::MemberRead in type library.
+
 0.004 2011-08-13
   - Add Module::Find to prereqs.
 

@@ -11,7 +11,7 @@ use MSWord::ToHTML::DocX;
 use Try::Tiny;
 
 BEGIN {
-    our $VERSION = '0.004'; # VERSION
+    our $VERSION = '0.005'; # VERSION
 }
 
 # ABSTRACT: Take old or new Word files and spit out superclean HTML
@@ -66,6 +66,11 @@ Which means that you must have the binary programs tidy and abiword installed.
         my $notes_html = $docx->get_html;
           # This returns an instance of MSWord::ToHTML::HTML
 
+        my $text = $notes_html->content;
+          # The text content of the file.
+        my $text = $writing_html->content;
+          # The text content of the file.
+
     }
 
 =head1 METHODS
@@ -93,9 +98,21 @@ object that contains:
 
 An IO::All::File object from the html file written to your temp directory.
 I haven't tested this on Windows, but the module attempts to be
-agnostic with regards to temporary directories. So you can do stuff like this:
+agnostic with regards to temporary directories.
 
-  my $long_html_string = $notes_html->file->slurp;
+Because of the type conversions involved, that file object stores its
+content in a scalarref, which is an IO::All::String object. To use it
+directly, use
+
+  my $long_html_string = ${$notes_html->file};
+
+=item content
+
+This module does that dereferencing for you in this convenience method on
+MSWord::ToHTML::HTML.
+
+  my $long_html_string = $notes_html->content;
+
 
 =item images
 
@@ -116,7 +133,7 @@ Amiri Barksdale, E<lt>amiri@roosterpirates.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2011 the MSWord::ToHTML L</AUTHOR> listed above.
+Copyright (c) 2012 the MSWord::ToHTML L</AUTHOR> listed above.
 
 =head1 LICENSE
 
@@ -126,5 +143,9 @@ it under the same terms as Perl itself.
 =head1 SEE ALSO
 
 L<IO::All>
+
+L<IO::All::File>
+
+L<IO::All::String>
 
 =cut

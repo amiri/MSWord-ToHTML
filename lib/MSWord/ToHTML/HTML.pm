@@ -19,6 +19,11 @@ has "images" => (
     coerce => 1,
 );
 
+sub content {
+    my $self = shift;
+    return ${$self->file};
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

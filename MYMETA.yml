@@ -4,12 +4,12 @@ author:
   - 'Amiri Barksdale, <amiri@roosterpirates.com>'
   - 'Amiri Barksdale <amiri@roosterpirates.com>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.62
   Test::Most: 0.23
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.62
 dynamic_config: 0
-generated_by: 'Module::Install version 1.01, CPAN::Meta::Converter version 2.112150'
+generated_by: 'Module::Install version 1.04, CPAN::Meta::Converter version 2.113640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -57,4 +57,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/amiri/MSWord-ToHTML.git
-version: 0.003
+version: 0.004

@@ -9,6 +9,7 @@ use MooseX::Types -declare => [qw/MyFile MSDoc MSDocX/];
 use Try::Tiny;
 use Text::Extract::Word;
 use Archive::Zip qw/:ERROR_CODES :CONSTANTS/;
+use Archive::Zip::MemberRead;
 use File::Spec;
 
 subtype MyFile, as IO_All, where {
