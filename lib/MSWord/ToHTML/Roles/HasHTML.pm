@@ -357,8 +357,9 @@ method html_to_html5( IO::All $base_html) {
 
     my $html5_file = io->catfile( io->tmpdir, $filename . '.html' )->utf8->print($html5);
     my $html5_images = "$base_html" . "_files";
+    my $new_filename = $html5_file->file;
     return MSWord::ToHTML::HTML->new(
-      file => $html5_file,
+      file => "$new_filename",
       ( -e $html5_images ? ( images => $html5_images ) : () )
     );
 }
