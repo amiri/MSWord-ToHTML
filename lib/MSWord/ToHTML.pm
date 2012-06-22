@@ -11,7 +11,7 @@ use MSWord::ToHTML::DocX;
 use Try::Tiny;
 
 BEGIN {
-    our $VERSION = '0.005'; # VERSION
+    our $VERSION = '0.006'; # VERSION
 }
 
 # ABSTRACT: Take old or new Word files and spit out superclean HTML

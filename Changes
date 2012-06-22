@@ -1,5 +1,8 @@
 Revison history for MSWord-ToHTML
 
+0.006 2012-06-22
+  - Fix inc/ directory; WriteAll was missing
+
 0.005 2012-01-10
   - Add a method content to MSWord::ToHTML::HTML to retrieve
     the new html file's content. This was wrong before: the file
