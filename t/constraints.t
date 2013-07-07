@@ -1,10 +1,9 @@
 #!/usr/bin/env perl
 
 use strictures 1;
-use Test::Most qw/no_plan/;
+use Test::Most tests => 122;
 use Test::Moose;
 use Module::Find;
-use Devel::Dwarn;
 use Archive::Zip::MemberRead;
 use lib 'lib';
 use MSWord::ToHTML;

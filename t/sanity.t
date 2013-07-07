@@ -2,7 +2,7 @@
 
 use strictures 1;
 use Module::Find;
-use Test::Most qw/no_plan/;
+use Test::Most tests => 6;
 use lib 'lib';
 
 my @found = useall MSWord;

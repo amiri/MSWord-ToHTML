@@ -93,7 +93,7 @@ method get_dom($file) {
 method extract_base_html {
     my $new_file =
       io->catfile( io->tmpdir, sha1_hex( $self->file->slurp ) . '.html' );
-    system( 'abiword', '-t', 'html', '-o', $new_file, $self->file );
+    system( 'abiword', '--verbose', 0, '-t', 'html', '-o', $new_file, $self->file );
     return $self->pre_clean_html($new_file);
 }
 
@@ -145,7 +145,6 @@ method pre_clean_html($html) {
     }
 
     my $file = io("$html")->utf8->print( $tree->as_HTML );
-    #say $file;
     $tree->delete;
     return $file;
 }
@@ -218,18 +217,19 @@ method post_clean_html( IO::All $html, Str $title) {
 
     my @footnotes =
       $tree->look_down( '_tag', 'span',
-      sub { $_[0]->attr('id') =~ /footnote/ } );
+      sub { $_[0]->attr('id') =~ /footnote_ref/ } );
     for my $footnote (@footnotes) {
       my $id = $footnote->attr('id');
       my $anchor = $footnote->look_down( '_tag', 'a' );
       $anchor->attr( 'id', $id );
+      $anchor->attr( 'class', 'footnote' );
       my $new = HTML::Element->new('sup');
       $new->push_content( $footnote->detach_content );
       $footnote->replace_with($new);
     }
 
     my $final_style_tag = $tree->look_down( '_tag', 'style' );
-    $final_style_tag->delete;
+    $final_style_tag->delete if $final_style_tag;
 
     ### End final cleaning
 
@@ -246,14 +246,17 @@ method post_clean_html( IO::All $html, Str $title) {
 method filter_css($tree) {
     my $style_tag = $tree->look_down( '_tag', 'style' );
     my $parsed_style;
-    {
-      local *STDERR;
-      local *STDOUT;
-      open( STDOUT, '>', File::Spec->devnull() );
-      open( STDERR, '>', File::Spec->devnull() );
-      my $style_string = HTML::Entities::decode( $style_tag->as_HTML );
-      $style_string =~ s/font\-family\:'.+?'//g;
-      $parsed_style = $self->css->read_string($style_string);
+
+    if ($style_tag) {
+        {
+          local *STDERR;
+          local *STDOUT;
+          open( STDOUT, '>', File::Spec->devnull() );
+          open( STDERR, '>', File::Spec->devnull() );
+          my $style_string = HTML::Entities::decode( $style_tag->as_HTML );
+          $style_string =~ s/font\-family\:'.+?'//g;
+          $parsed_style = $self->css->read_string($style_string);
+        }
     }
 
     if ($parsed_style) {

@@ -1,5 +1,10 @@
 Revison history for MSWord-ToHTML
 
+0.007 2013-07-06
+  - Fix *.docx processing by handling some uninit values
+  - Add test counts
+  - Remove spurious dep on Devel::Dwarn
+
 0.006 2012-06-22
   - Fix inc/ directory; WriteAll was missing
 

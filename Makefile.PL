@@ -1,4 +1,5 @@
-#!/usr/bin/env perl
+use strict;
+use warnings;
 use inc::Module::Install;
 
 auto_set_repository;
@@ -6,10 +7,10 @@ name 'MSWord-ToHTML';
 all_from 'lib/MSWord/ToHTML.pm';
 readme_from 'lib/MSWord/ToHTML.pm';
 abstract 'Take old or new Word files and spit out extremely clean HTML';
-author 'Amiri Barksdale <amiri@roosterpirates.com>';
+author 'Amiri Barksdale <amiribarksdale@gmail.com>';
 license 'perl';
 perl_version '5.010001';
-version '0.006';
+version '0.007';
 
 requires_external_bin 'abiword';
 requires_external_bin 'tidy';
