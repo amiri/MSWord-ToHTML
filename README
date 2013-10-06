@@ -5,10 +5,10 @@ NAME
 
 NOTICE
     Because of the PITA involved in processing Word files, I have punted
-    most of the work to Abiword <http://www.abisource.com/> and tidy
+    most of the work to Libreoffice <http://www.libreoffice.org/> and tidy
     <http://tidy.sourceforge.net/>.
 
-    Which means that you must have the binary programs tidy and abiword
+    Which means that you must have the binary programs tidy and libreoffice
     installed.
 
 SYNOPSIS

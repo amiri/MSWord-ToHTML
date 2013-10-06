@@ -10,20 +10,29 @@ use MSWord::ToHTML::Doc;
 use MSWord::ToHTML::DocX;
 use Try::Tiny;
 
-BEGIN {
-    our $VERSION = '0.007'; # VERSION
-}
-
 # ABSTRACT: Take old or new Word files and spit out superclean HTML
 
 method validate_file( MyFile $file does coerce ) {
     try {
-      return MSWord::ToHTML::Doc->new( file => $file ) if is_MSDoc($file);
-      return MSWord::ToHTML::DocX->new( file => $file )
-        if is_MSDocX($file);
+        if ("$file" =~ /doc$/) {
+            return MSWord::ToHTML::Doc->new(file => $file) if is_MSDoc($file);
+            return MSWord::ToHTML::DocX->new(file => $file)
+                if is_MSDocX($file);
+
+        } elsif ("$file" =~ /docx$/) {
+            return MSWord::ToHTML::DocX->new(file => $file)
+                if is_MSDocX($file);
+            return MSWord::ToHTML::Doc->new(file => $file) if is_MSDoc($file);
+
+        } else {
+            return MSWord::ToHTML::Doc->new(file => $file) if is_MSDoc($file);
+            return MSWord::ToHTML::DocX->new(file => $file)
+                if is_MSDocX($file);
+
+        }
     }
     catch {
-      confess "I don't know what to do with this file: $_";
+        confess "I don't know what to do with this file: $_";
     };
 }
 
@@ -42,9 +51,9 @@ Take old or new format Word files and spit out extremely clean HTML.
 =head1 NOTICE
 
 Because of the PITA involved in processing Word files, I have punted most of
-the work to L<Abiword|http://www.abisource.com/> and L<tidy|http://tidy.sourceforge.net/>.
+the work to L<Libreoffice|http://www.libreoffice.org/> and L<tidy|http://tidy.sourceforge.net/>.
 
-Which means that you must have the binary programs tidy and abiword installed.
+Which means that you must have the binary programs tidy and libreoffice installed.
 
 =head1 SYNOPSIS
 
@@ -129,11 +138,11 @@ friendlier:
 
 =head1 AUTHOR
 
-Amiri Barksdale, E<lt>amiri@roosterpirates.comE<gt>
+Amiri Barksdale, E<lt>amiribarksdale@gmail.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2012 the MSWord::ToHTML L</AUTHOR> listed above.
+Copyright (c) 2013 the MSWord::ToHTML L</AUTHOR> listed above.
 
 =head1 LICENSE
 
