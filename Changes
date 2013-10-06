@@ -1,4 +1,38 @@
-Revison history for MSWord-ToHTML
+Revision history for {{$dist->name}}
+
+{{$NEXT}}
+
+0.008 2013-10-06
+  - BREAKING: Switch to libreoffice instead of abiword.
+    abiword ceased to wrap footnotes in handy
+    classes that we could identify. This means that
+    any post-processing scripts you may have
+    written will now need to look for different
+    classnames of footnotes, i.e., sdfootnoteanc for
+    footnote refs in the text, and sdfootnotesym
+    for footnote contents at the bottom.
+  - Use file extension to hint which extractor
+    to use.
+  - Switch to Dist::Zilla.
+  - Remove pernicious "_GoBack" ids in Word docx-xml
+    derived HTML.
+  - Delete invalid XML characters before passing
+    the text to tidy.
+
+0.007 2013-07-06
+  - Fix *.docx processing by handling some uninit values
+  - Add test counts
+  - Remove spurious dep on Devel::Dwarn
+
+0.007 2013-07-06
+  - Fix *.docx processing by handling some uninit values
+  - Add test counts
+  - Remove spurious dep on Devel::Dwarn
+
+0.007 2013-07-06
+  - Fix *.docx processing by handling some uninit values
+  - Add test counts
+  - Remove spurious dep on Devel::Dwarn
 
 0.007 2013-07-06
   - Fix *.docx processing by handling some uninit values

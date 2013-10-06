@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use strictures 1;
-use Test::Most tests => 65;
+use Test::Most tests => 64;
 use Test::Moose;
 use Module::Find;
 use Archive::Zip::MemberRead;

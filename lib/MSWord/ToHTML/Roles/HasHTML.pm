@@ -18,6 +18,8 @@ use Encode;
 use Encode::Guess;
 use CSS;
 use List::MoreUtils qw/any/;
+use Path::Class::File;
+use Cwd;
 use feature 'say';
 
 has 'style' => (
@@ -93,7 +95,15 @@ method get_dom($file) {
 method extract_base_html {
     my $new_file =
       io->catfile( io->tmpdir, sha1_hex( $self->file->slurp ) . '.html' );
-    system( 'abiword', '--verbose', 0, '-t', 'html', '-o', $new_file, $self->file );
+    system( 'libreoffice', '--convert-to', 'html', '--invisible', '--headless', '--minimized', $self->file );
+    # We have to construct the filename, because libreoffice does not take
+    # file destination arguments. Blech.
+    (my $oo_file = $self->file) =~ s/\.doc.*$/.html/;
+    my $oo_file_obj = Path::Class::File->new($oo_file);
+    my $oo_file_name = $oo_file_obj->basename;
+    $oo_file = Path::Class::File->new(getcwd, $oo_file_name);
+
+    system('mv', $oo_file, $new_file);
     return $self->pre_clean_html($new_file);
 }
 
@@ -111,13 +121,32 @@ method prepare_charset($html) {
 
 method pre_clean_html($html) {
     my $text         = $self->prepare_charset( $html->all );
+    # Remove some extra-stupid Word tags
+    $text =~ s/<a name="_GoBack".*?<\/a>//gis;
+    $text =~ s/<a id="_GoBack".*?<\/a>//gis;
+    # Rename footnote name attrs so they don't collide with the ids that
+    # tidy would turn them into. Tidy doesn't like names and ids to match.
+    $text =~ s/name="sdfootnote(\d+)(anc|sym)"/name="sdfootnote$1$2" id="sdfootnote$1$2-id"/gi;
+    # Remove invalid XML characters
+    $text =~ s/[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]//go;
     my $tree_builder = HTML::TreeBuilder->new;
     my $tree         = $tree_builder->parse($text);
+    my @brs          = $tree->look_down('_tag', 'br');
     my @ps           = $tree->look_down( '_tag', 'p' );
     my @spans        = $tree->look_down( '_tag', 'span' );
 
+    # Delete brs
+    for my $break (@brs) {
+        $break->delete;
+    }
+
+    # Destyle <p>s and <span>s.
     for my $verbose (@ps) {
       $verbose->attr( 'dir', undef );
+      $verbose->attr( 'style', undef );
+      $verbose->attr( 'class', undef );
+      $verbose->attr( 'xml:lang', undef );
+      $verbose->attr( 'lang',     undef );
     }
     for my $verbose (@spans) {
       $verbose->attr( 'xml:lang', undef );
@@ -211,21 +240,11 @@ method post_clean_html( IO::All $html, Str $title) {
 
     my @classed_elements =
       $tree->look_down( sub { defined $_[0]->attr('class') } );
-    for my $classed (@classed_elements) {
-      $classed->attr( 'class', undef );
-    }
 
-    my @footnotes =
-      $tree->look_down( '_tag', 'span',
-      sub { $_[0]->attr('id') =~ /footnote_ref/ } );
-    for my $footnote (@footnotes) {
-      my $id = $footnote->attr('id');
-      my $anchor = $footnote->look_down( '_tag', 'a' );
-      $anchor->attr( 'id', $id );
-      $anchor->attr( 'class', 'footnote' );
-      my $new = HTML::Element->new('sup');
-      $new->push_content( $footnote->detach_content );
-      $footnote->replace_with($new);
+    # Retain footnote classes for end-user manipulation, after
+    # this module has done its work.
+    for my $classed (@classed_elements) {
+      $classed->attr( 'class', undef ) unless $classed->attr('class') =~ /sdfootnote(anc|sym)/;
     }
 
     my $final_style_tag = $tree->look_down( '_tag', 'style' );
@@ -233,10 +252,6 @@ method post_clean_html( IO::All $html, Str $title) {
 
     ### End final cleaning
 
-    if ( @footnotes > 0 ) {
-      my @divs = $tree->look_down( '_tag', 'div' );
-      $divs[$#divs]->attr( 'id', 'footnotes' );
-    }
     my $text = $tree->as_HTML;
     $tree->delete;
     io("$html")->print($text);
@@ -312,30 +327,31 @@ method filter_css($tree) {
 
 method html_to_html5( IO::All $base_html) {
     try {
-      system(
-        "tidy",                  "-f",
-        "$base_html.err",        "-m",
-        "--clean",               "yes",
-        "--preserve-entities",   "yes",
-        "--indent-cdata",        "yes",
-        "--escape-cdata",        "yes",
-        "--repeated-attributes", "keep-last",
-        "--char-encoding",       "utf8",
-        "--output-encoding",     "utf8",
-        "--merge-spans",         "yes",
-        "-quiet",                "--bare",
-        "yes",                   "--logical-emphasis",
-        "yes",                   "--word-2000",
-        "yes",                   "--drop-empty-paras",
-        "yes",                   "--drop-font-tags",
-        "yes",                   "--drop-proprietary-attributes",
-        "yes",                   "--hide-endtags",
-        "no",                    "-language",
-        "en",                    "--add-xml-decl",
-        "yes",                   "--output-xhtml",
-        "yes",                   "--doctype",
-        "strict",                "$base_html"
-      );
+        system(
+            "/usr/bin/tidy",                 "-f",
+            "$base_html.err",                "-m",
+            "-clean",                        "-quiet",
+            "--preserve-entities",           "yes",
+            "--indent-cdata",                "yes",
+            "--escape-cdata",                "yes",
+            "--repeated-attributes",         "keep-last",
+            "--char-encoding",               "utf8",
+            "--output-encoding",             "utf8",
+            "--merge-spans",                 "yes",
+            "--bare",                        "yes",
+            "--logical-emphasis",            "yes",
+            "--word-2000",                   "yes",
+            "--drop-empty-paras",            "yes",
+            "--drop-font-tags",              "yes",
+            "--drop-proprietary-attributes", "yes",
+            "--hide-endtags",                "no",
+            "-language",                     "en",
+            "--add-xml-decl",                "yes",
+            "--output-xhtml",                "yes",
+            "--tidy-mark",                   "no",
+            "--doctype",                     "strict",
+            "$base_html"
+        );
     }
     catch {
       "I could not tidy the base_html: $_";
