@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Remove Word file that cannot be expanded on
+    Windows, change test counts accordingly. Thanks
+    to Alexandr Ciornii <notifications@github.com>.
 
 0.008 2013-10-06
   - BREAKING: Switch to libreoffice instead of abiword.
