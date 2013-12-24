@@ -124,9 +124,10 @@ method pre_clean_html($html) {
     # Remove some extra-stupid Word tags
     $text =~ s/<a name="_GoBack".*?<\/a>//gis;
     $text =~ s/<a id="_GoBack".*?<\/a>//gis;
-    # Rename footnote name attrs so they don't collide with the ids that
+    # Rename footnote/endnote name attrs so they don't collide with the ids that
     # tidy would turn them into. Tidy doesn't like names and ids to match.
     $text =~ s/name="sdfootnote(\d+)(anc|sym)"/name="sdfootnote$1$2" id="sdfootnote$1$2-id"/gi;
+    $text =~ s/name="sdendnote(\d+)(anc|sym)"/name="sdendnote$1$2" id="sdendnote$1$2-id"/gi;
     # Remove invalid XML characters
     $text =~ s/[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]//go;
     my $tree_builder = HTML::TreeBuilder->new;
