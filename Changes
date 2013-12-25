@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.010     2013-12-24
   - Not only footnotes need to be renamed, but
     StarWriter endnotes as well, in order not to
     have colliding names/ids.
